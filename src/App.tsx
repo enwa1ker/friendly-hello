@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link } from "react-router-dom"; // Добавил Link
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +18,20 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          {/* Шапка с логотипом */}
+          <header className="fixed top-0 left-0 w-full z-50 p-6 flex items-center gap-4 bg-transparent backdrop-blur-sm">
+            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <img 
+                src="/logo.png" 
+                alt="Logo" 
+                className="h-8 w-8 object-contain" 
+              />
+              <span className="font-semibold text-xl tracking-tight">
+                Ermek Akbagyshov
+              </span>
+            </Link>
+          </header>
+
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="*" element={<NotFound />} />
