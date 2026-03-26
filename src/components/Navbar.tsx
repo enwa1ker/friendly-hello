@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 const links = [
   { href: "#hero", label: "Главная" },
@@ -25,7 +26,6 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <a href="#hero" className="text-xl font-bold text-gradient">EA</a>
 
-          {/* Desktop */}
           <div className="hidden md:flex items-center gap-1">
             {links.map((l) => (
               <a
@@ -36,16 +36,20 @@ const Navbar = () => {
                 {l.label}
               </a>
             ))}
+            <div className="ml-2">
+              <ThemeToggle />
+            </div>
           </div>
 
-          {/* Mobile toggle */}
-          <button onClick={() => setOpen(!open)} className="md:hidden text-foreground p-2">
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button onClick={() => setOpen(!open)} className="text-foreground p-2">
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {open && (
           <motion.div
