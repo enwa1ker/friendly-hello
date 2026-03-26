@@ -1,6 +1,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ExternalLink, ArrowRight } from "lucide-react";
+import boosterIcon from "@/assets/booster-icon.jpeg";
+import TextReveal from "./TextReveal";
 
 const projects = [
   {
@@ -9,7 +11,7 @@ const projects = [
     description: "Приложение и веб-платформа для управления полным циклом швейного производства. Kanban-модель, теория ограничений, командное взаимодействие.",
     tags: ["React", "React Native", "Python", "Django", "SQL"],
     link: "https://booster.kg/",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop",
+    icon: boosterIcon,
     accent: "from-blue-500/20 to-cyan-500/20",
   },
   {
@@ -19,8 +21,6 @@ const projects = [
     tags: ["React", "TypeScript", "Tailwind", "Figma"],
     link: "https://empathy-engine-boost.lovable.app",
     beforeAfter: true,
-    beforeImage: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&h=400&fit=crop",
-    afterImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
     accent: "from-amber-500/20 to-orange-500/20",
   },
   {
@@ -29,7 +29,6 @@ const projects = [
     description: "Личное приложение-планнер с финансовым трекером и трекером привычек. Мой собственный стартап-проект.",
     tags: ["React", "TypeScript", "CSS"],
     link: "https://weekly-planer.netify.app/",
-    image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=400&fit=crop",
     accent: "from-emerald-500/20 to-teal-500/20",
   },
   {
@@ -38,7 +37,6 @@ const projects = [
     description: "Руководил обучением студентов по React, JavaScript и вёрстке в ведущей IT-школе Кыргызстана.",
     tags: ["React", "JavaScript", "HTML/CSS", "Менторинг"],
     link: "https://geeks.kg/",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop",
     accent: "from-yellow-500/20 to-amber-500/20",
   },
 ];
@@ -51,15 +49,15 @@ const ProjectsSection = () => {
     <section id="projects" className="py-24 sm:py-32 relative noise-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
           <p className="text-primary font-mono text-sm tracking-widest uppercase mb-2">Проекты</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold">
-            Избранные <span className="text-gradient">работы</span>
-          </h2>
+          <TextReveal as="h2" className="text-3xl sm:text-4xl md:text-5xl font-bold">
+            Избранные работы
+          </TextReveal>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -69,33 +67,49 @@ const ProjectsSection = () => {
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 60 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 * i }}
+              transition={{ duration: 0.7, delay: 0.12 * i, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -8 }}
               className="group skeuomorphic-card rounded-2xl overflow-hidden hover:glow-primary transition-all duration-500"
             >
-              {/* Image */}
-              <div className="relative h-48 sm:h-56 overflow-hidden">
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.accent} z-10`} />
-                {project.beforeAfter ? (
-                  <div className="flex h-full">
-                    <div className="w-1/2 relative overflow-hidden">
-                      <img src={project.beforeImage} alt="До" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                      <span className="absolute bottom-2 left-2 text-xs font-mono glass px-2 py-1 rounded-md text-foreground z-20">До</span>
+              {/* Top gradient + icon */}
+              <div className={`relative h-40 sm:h-48 overflow-hidden bg-gradient-to-br ${project.accent}`}>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {project.icon ? (
+                    <motion.img
+                      src={project.icon}
+                      alt={project.title}
+                      className="w-20 h-20 rounded-2xl object-cover shadow-2xl"
+                      whileHover={{ rotate: 10, scale: 1.1 }}
+                    />
+                  ) : project.beforeAfter ? (
+                    <div className="flex items-center gap-4">
+                      <div className="skeuomorphic-card px-4 py-2 rounded-lg">
+                        <span className="text-xs font-mono text-muted-foreground">До</span>
+                      </div>
+                      <motion.div
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.5 }}
+                      >
+                        <ArrowRight size={20} className="text-primary" />
+                      </motion.div>
+                      <div className="skeuomorphic-card px-4 py-2 rounded-lg border-primary/50">
+                        <span className="text-xs font-mono text-primary">После ✨</span>
+                      </div>
                     </div>
-                    <div className="w-px bg-primary/50 z-20" />
-                    <div className="w-1/2 relative overflow-hidden">
-                      <img src={project.afterImage} alt="После" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                      <span className="absolute bottom-2 right-2 text-xs font-mono glass px-2 py-1 rounded-md text-primary z-20">После</span>
-                    </div>
-                  </div>
-                ) : (
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                )}
+                  ) : (
+                    <span className="text-6xl font-bold text-foreground/5 uppercase tracking-tighter">
+                      {project.title}
+                    </span>
+                  )}
+                </div>
+                {/* Floating particles */}
+                <motion.div
+                  animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
+                  transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary/10 blur-md"
+                />
               </div>
 
               {/* Content */}
@@ -107,7 +121,9 @@ const ProjectsSection = () => {
                     </h3>
                     <p className="text-sm text-muted-foreground">{project.subtitle}</p>
                   </div>
-                  <ExternalLink size={16} className="text-muted-foreground group-hover:text-primary transition-colors mt-1" />
+                  <motion.div whileHover={{ rotate: 45 }} transition={{ duration: 0.2 }}>
+                    <ExternalLink size={16} className="text-muted-foreground group-hover:text-primary transition-colors mt-1" />
+                  </motion.div>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">{project.description}</p>
                 <div className="flex flex-wrap gap-2">
@@ -117,9 +133,13 @@ const ProjectsSection = () => {
                     </span>
                   ))}
                 </div>
-                <div className="mt-4 flex items-center gap-1.5 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  className="mt-4 flex items-center gap-1.5 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                >
                   Открыть проект <ArrowRight size={12} />
-                </div>
+                </motion.div>
               </div>
             </motion.a>
           ))}
